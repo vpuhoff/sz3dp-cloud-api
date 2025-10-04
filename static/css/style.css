@@ -1,0 +1,527 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Специальные стили для мобильных устройств */
+body.mobile-device {
+    -webkit-overflow-scrolling: touch;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body.mobile-device * {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+.connection-status {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.connection-status.connected {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.connection-status.disconnected {
+    background-color: #f44336;
+    color: white;
+}
+
+.fullscreen-button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+}
+
+.fullscreen-button:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.fullscreen-button:active {
+    transform: translateY(0);
+    background: #4e5bc6;
+}
+
+.fullscreen-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+main {
+    display: grid;
+    gap: 30px;
+}
+
+.model-info {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.model-info h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.progress-section {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-circle {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.progress-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.progress-bar {
+    transition: stroke-dasharray 0.5s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #2c3e50;
+}
+
+.time-remaining {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+}
+
+.time-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.progress-percent {
+    font-size: 1.5rem;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.printer-params {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.param-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.param-item {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.param-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.param-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.param-label {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.param-value {
+    font-size: 1.2rem;
+    color: #34495e;
+    font-weight: bold;
+}
+
+.update-info {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    color: #7f8c8d;
+}
+
+.update-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.update-text {
+    flex: 1;
+    text-align: left;
+}
+
+.update-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.update-info p {
+    margin-bottom: 5px;
+}
+
+/* Анимации */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.param-item:hover .param-icon {
+    animation: pulse 1s infinite;
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 1024px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .progress-circle {
+        width: 280px;
+        height: 280px;
+    }
+    
+    .param-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .connection-status {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    
+    .progress-section {
+        padding: 30px 20px;
+    }
+    
+    .progress-circle {
+        width: 220px;
+        height: 220px;
+    }
+    
+    .time-remaining {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+    
+    .time-value {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+    }
+    
+    .progress-percent {
+        font-size: 1.1rem;
+    }
+    
+    .printer-params {
+        padding: 20px;
+    }
+    
+    .param-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .param-item {
+        padding: 15px;
+    }
+    
+    .param-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    
+    .param-label {
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+    
+    .param-value {
+        font-size: 1.1rem;
+    }
+    
+    .update-info {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+    
+    .update-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .update-text {
+        text-align: center;
+    }
+    
+    .update-buttons {
+        justify-content: center;
+    }
+}
+
+/* Адаптивность для маленьких мобильных устройств */
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+    }
+    
+    header {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 6px;
+    }
+    
+    .connection-status {
+        font-size: 0.7rem;
+        padding: 5px 10px;
+    }
+    
+    .model-info {
+        padding: 15px;
+    }
+    
+    .model-info h2 {
+        font-size: 1.2rem;
+    }
+    
+    .progress-section {
+        padding: 20px 15px;
+    }
+    
+    .progress-circle {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .time-remaining {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+    }
+    
+    .time-value {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+    }
+    
+    .progress-percent {
+        font-size: 1rem;
+    }
+    
+    .printer-params {
+        padding: 15px;
+    }
+    
+    .param-grid {
+        gap: 12px;
+    }
+    
+    .param-item {
+        padding: 12px;
+    }
+    
+    .param-icon {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .param-label {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+    
+    .param-value {
+        font-size: 1rem;
+    }
+    
+    .update-info {
+        padding: 12px;
+        font-size: 0.8rem;
+    }
+    
+    .refresh-button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .fullscreen-button {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 10px;
+    }
+    
+    .fullscreen-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* Адаптивность для очень маленьких экранов */
+@media (max-width: 360px) {
+    .progress-circle {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .time-value {
+        font-size: 1rem;
+    }
+    
+    .progress-percent {
+        font-size: 0.9rem;
+    }
+    
+    header h1 {
+        font-size: 1.3rem;
+    }
+}
+
+/* Горизонтальная ориентация мобильных устройств */
+@media (max-width: 896px) and (orientation: landscape) {
+    .progress-circle {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .param-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .param-item {
+        padding: 10px;
+    }
+    
+    .param-icon {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+    
+    .param-label {
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+    
+    .param-value {
+        font-size: 0.9rem;
+    }
+}

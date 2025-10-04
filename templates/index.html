@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D Принтер - Статус</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Автоматическая перезагрузка отключена для сохранения полноэкранного режима -->
+    
+    <!-- PWA мета-теги -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="3D Printer">
+    
+    <!-- Предотвращение масштабирования на мобильных -->
+    <meta name="format-detection" content="telephone=no">
+    
+    <!-- PWA манифест -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>3D Принтер - Статус печати</h1>
+            <div class="connection-status {{ 'connected' if data.connection_status == 'Подключено' else 'disconnected' }}">
+                {{ data.connection_status }}
+            </div>
+        </header>
+
+        <main>
+            <!-- Информация о модели -->
+            <section class="model-info">
+                <h2>Модель: {{ data.model_name }}</h2>
+            </section>
+
+            <!-- Прогресс печати -->
+            <section class="progress-section">
+                <div class="progress-circle">
+                    <svg viewBox="0 0 100 100" class="progress-ring">
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="45"
+                            fill="none"
+                            stroke="#e0e0e0"
+                            stroke-width="8"
+                        />
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="45"
+                            fill="none"
+                            stroke="#4CAF50"
+                            stroke-width="8"
+                            stroke-linecap="round"
+                            stroke-dasharray="{{ (data.progress_percent * 2.827) | round(2) }} 282.7"
+                            stroke-dashoffset="0"
+                            class="progress-bar"
+                        />
+                    </svg>
+                    <div class="progress-text">
+                        <div class="time-remaining">Время осталось</div>
+                        <div class="time-value">{{ data.time_remaining }}</div>
+                        <div class="progress-percent">{{ data.progress_percent }}%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Параметры принтера -->
+            <section class="printer-params">
+                <div class="param-grid">
+                    <div class="param-item">
+                        <div class="param-icon extruder-icon">🔥</div>
+                        <div class="param-label">Экструдер</div>
+                        <div class="param-value">
+                            {{ data.extruder_temp.current }}°C / {{ data.extruder_temp.target }}°C
+                        </div>
+                    </div>
+
+                    <div class="param-item">
+                        <div class="param-icon bed-icon">🛏️</div>
+                        <div class="param-label">Стол</div>
+                        <div class="param-value">
+                            {{ data.bed_temp.current }}°C / {{ data.bed_temp.target }}°C
+                        </div>
+                    </div>
+
+                    <div class="param-item">
+                        <div class="param-icon enclosure-icon">🚪</div>
+                        <div class="param-label">Корпус</div>
+                        <div class="param-value">{{ data.enclosure_status }}</div>
+                    </div>
+
+                    <div class="param-item">
+                        <div class="param-icon filament-icon">🎯</div>
+                        <div class="param-label">Филамент</div>
+                        <div class="param-value">{{ data.filament_status }}</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Информация об обновлении -->
+            <section class="update-info">
+                <div class="update-content">
+                    <div class="update-text">
+                        <p>Последнее обновление: {{ data.last_update }}</p>
+                        <p>Автообновление каждые 10 секунд</p>
+                    </div>
+                    <div class="update-buttons">
+                        <button id="fullscreen-btn" class="fullscreen-button" title="Полноэкранный режим">
+                            <span class="fullscreen-icon">⛶</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
