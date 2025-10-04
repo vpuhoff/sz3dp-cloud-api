@@ -437,6 +437,145 @@ class SZ3DPCloudClient:
             
         return []
     
+    def open_camera(self, registration_code: str = "ULJMGV") -> bool:
+        """Включение камеры принтера"""
+        if not self.is_authenticated:
+            logger.info("Не авторизован, пробуем авторизоваться...")
+            if not self.login():
+                logger.error("Не удалось авторизоваться для включения камеры")
+                return False
+                
+        try:
+            endpoint = "/user/printer"
+            
+            data = {
+                "Cmd": "OpenCamera",
+                "Parameters": {
+                    "RegistrationCode": registration_code
+                }
+            }
+            
+            headers = {
+                'accept': 'application/json, text/javascript, */*; q=0.01',
+                'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                'x-requested-with': 'XMLHttpRequest',
+                'origin': self.base_url,
+                'referer': f'{self.base_url}/printerDetail.html?regcode={registration_code}'
+            }
+            
+            request_data = f'{{"Cmd":"OpenCamera","Parameters":{{"RegistrationCode":"{registration_code}"}}}}'
+            logger.info(f"=== ВКЛЮЧЕНИЕ КАМЕРЫ ===")
+            logger.info(f"Принтер: {registration_code}")
+            logger.info(f"URL: {self.base_url}{endpoint}")
+            logger.info(f"Данные запроса: {request_data}")
+            
+            response = self.session.post(
+                f"{self.base_url}{endpoint}",
+                data=request_data,
+                headers=headers
+            )
+            
+            logger.info(f"Статус ответа: {response.status_code}")
+            logger.info(f"Заголовки ответа: {dict(response.headers)}")
+            logger.info(f"Текст ответа: {response.text[:500]}...")
+            
+            if response.status_code == 200:
+                try:
+                    api_data = response.json()
+                    logger.info(f"JSON ответ: {api_data}")
+                    
+                    if api_data.get('ErrorCode') == 200:
+                        logger.info("✅ Камера успешно включена")
+                        return True
+                    else:
+                        logger.error(f"❌ Ошибка включения камеры: {api_data.get('Message', 'Unknown error')}")
+                except Exception as e:
+                    logger.error(f"❌ Ошибка парсинга JSON ответа включения камеры: {e}")
+                    logger.error(f"Ответ сервера: {response.text}")
+            else:
+                logger.error(f"❌ HTTP ошибка при включении камеры: {response.status_code}")
+                logger.error(f"Ответ сервера: {response.text}")
+                
+        except Exception as e:
+            logger.error(f"❌ Ошибка при включении камеры: {e}")
+            import traceback
+            logger.error(f"Трассировка: {traceback.format_exc()}")
+            
+        return False
+    
+    def get_printer_snapshot(self, registration_code: str = "ULJMGV") -> Optional[str]:
+        """Получение снепшота с камеры принтера"""
+        if not self.is_authenticated:
+            logger.info("Не авторизован, пробуем авторизоваться...")
+            if not self.login():
+                logger.error("Не удалось авторизоваться для получения снепшота")
+                return None
+                
+        try:
+            endpoint = "/user/printer"
+            
+            data = {
+                "Cmd": "GetPrinterSnapshot",
+                "Parameters": {
+                    "RegistrationCode": registration_code
+                }
+            }
+            
+            headers = {
+                'accept': 'application/json, text/javascript, */*; q=0.01',
+                'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                'x-requested-with': 'XMLHttpRequest',
+                'origin': self.base_url,
+                'referer': f'{self.base_url}/printerDetail.html?regcode={registration_code}'
+            }
+            
+            request_data = f'{{"Cmd":"GetPrinterSnapshot","Parameters":{{"RegistrationCode":"{registration_code}"}}}}'
+            logger.info(f"=== ПОЛУЧЕНИЕ СНЕПШОТА ===")
+            logger.info(f"Принтер: {registration_code}")
+            logger.info(f"URL: {self.base_url}{endpoint}")
+            logger.info(f"Данные запроса: {request_data}")
+            
+            response = self.session.post(
+                f"{self.base_url}{endpoint}",
+                data=request_data,
+                headers=headers
+            )
+            
+            logger.info(f"Статус ответа: {response.status_code}")
+            logger.info(f"Размер ответа: {len(response.text)} символов")
+            
+            if response.status_code == 200:
+                try:
+                    api_data = response.json()
+                    logger.info(f"JSON структура ответа: {list(api_data.keys()) if isinstance(api_data, dict) else 'Не словарь'}")
+                    
+                    if api_data.get('ErrorCode') == 200:
+                        snapshot_data = api_data.get('Snapshot', '')
+                        if snapshot_data:
+                            data_size = len(snapshot_data)
+                            logger.info(f"✅ Снепшот успешно получен, размер: {data_size} символов")
+                            logger.info(f"Начало данных: {snapshot_data[:50]}...")
+                            return snapshot_data
+                        else:
+                            logger.warning("❌ Пустой снепшот от сервера")
+                            logger.info(f"Полный ответ: {api_data}")
+                    else:
+                        logger.error(f"❌ API вернул ошибку: {api_data.get('Message', 'Unknown error')}")
+                        logger.info(f"Полный ответ: {api_data}")
+                except Exception as e:
+                    logger.error(f"❌ Ошибка парсинга JSON ответа снепшота: {e}")
+                    logger.error(f"Ответ сервера (первые 1000 символов): {response.text[:1000]}")
+            else:
+                logger.error(f"❌ HTTP ошибка при получении снепшота: {response.status_code}")
+                logger.error(f"Ответ сервера: {response.text[:500]}")
+                
+        except Exception as e:
+            logger.error(f"❌ Ошибка при получении снепшота: {e}")
+            import traceback
+            logger.error(f"Трассировка: {traceback.format_exc()}")
+            
+        return None
+
     def logout(self):
         """Выход из системы"""
         try:

@@ -67,6 +67,63 @@
                 </div>
             </section>
 
+            <!-- Камера принтера -->
+            <section class="camera-section">
+                <div class="camera-header">
+                    <h3>📹 Камера принтера</h3>
+                    <div class="camera-status {{ 'enabled' if data.camera_enabled else 'disabled' }}">
+                        {{ 'Камера включена' if data.camera_enabled else 'Камера отключена' }}
+                    </div>
+                </div>
+                
+                <div class="camera-container">
+                    {% if data.camera_snapshot %}
+                        <div class="camera-snapshot">
+                            <img src="data:image/jpeg;base64,{{ data.camera_snapshot }}" 
+                                 alt="Снепшот с камеры принтера" 
+                                 class="snapshot-image"
+                                 id="camera-image">
+                        </div>
+                    {% else %}
+                        <div class="camera-placeholder">
+                            <div class="placeholder-icon">📷</div>
+                            <div class="placeholder-text">
+                                {% if data.camera_enabled %}
+                                    Загрузка изображения...
+                                {% else %}
+                                    Камера не включена
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="camera-controls">
+                        <button id="enable-camera-btn" class="camera-button enable-button" 
+                                title="Включить камеру">
+                            <span class="button-icon">📹</span>
+                            <span class="button-text">Включить камеру</span>
+                        </button>
+                        
+                        <button id="refresh-camera-btn" class="camera-button refresh-button" 
+                                title="Обновить снепшот">
+                            <span class="button-icon">🔄</span>
+                            <span class="button-text">Обновить</span>
+                        </button>
+                        
+                        <button id="test-camera-btn" class="camera-button test-button" 
+                                title="Тестировать камеру">
+                            <span class="button-icon">🧪</span>
+                            <span class="button-text">Тест</span>
+                        </button>
+                    </div>
+                    
+                    <div class="camera-info">
+                        <p>Последнее обновление камеры: {{ data.snapshot_last_update }}</p>
+                        <p>Автообновление каждую минуту</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Параметры принтера -->
             <section class="printer-params">
                 <div class="param-grid">
